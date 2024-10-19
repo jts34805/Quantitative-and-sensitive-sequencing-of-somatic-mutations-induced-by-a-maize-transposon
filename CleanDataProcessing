@@ -1,0 +1,21 @@
+##this code is for converting the mapped MuSeq2 reads to a matrix that can be analyzed in R. 
+library(plyr) #this package is used to concatenate insertion locations based on UMI's
+f = dir() #set working directory to directory where mapped MuSeq2 txt files are located.
+if ('CleanData.rda' %in% f) { load('CleanData.rda') } else { CleanData = list() } #making "CleanData" can be memory intensive. Sometimes, this loop needs to be run in different sessions to reduce memory pressure.
+f = f[grepl('.txt', f)] #use grepl to grab any files in the directory that end in ".txt" which are all the mapped MuSeq2 txt files. 
+for (f2 in f) { #begin loop processing through all txt files in the directory
+  A = read.table(f2)
+  colnames(A) = c("Chromosome","Position","PositionRev","Reverse","Validation","UMI","MAPQ","Length", "Barcode", "LigationBase") 
+  A$Position[A$Reverse < 0] = A$PositionRev[A$Reverse < 0] - A$Reverse[A$Reverse < 0] - 1  # Shift position to edge of TIR rather than left-most base
+  A = A[(A$MAPQ >= 10) & (A$Validation %in% c('TATCTC','TGTCTC')), -c(3,5,7:8,10)]# Require mapping quality greater than 10
+  B=table(A$Barcode) #Barcode column of A contains the sample specific barcode. Here I am making a table of that to filter out any reads that dont match the most common barcode, which matches the expected barcode
+  B=names(B[order(B, decreasing=TRUE)]) 
+  A=A[A$Barcode==B[1],] #filter matrix so that only rows containing an exact match to expected barcode are kept. 
+  A = ddply(A, colnames(A), nrow) #use ddply to concatenate rows that are identical, adds a count column for each row that was concatenated
+  colnames(A)[6] = 'Reads' 
+  A$Direction = sign(A[,3])  
+  A = A[order(A[,1],A[,2],-A$Direction),c(1,2,7,6,4)]
+  CleanData[[f2]]=A #adds the newly processed file to the CleanData list. 
+  save(CleanData, file = 'CleanData.rda') #saves CleanData list so that code saves progress, in case of excessive memory pressure. loop begins again with the next txt file in the directory.
+}
+
