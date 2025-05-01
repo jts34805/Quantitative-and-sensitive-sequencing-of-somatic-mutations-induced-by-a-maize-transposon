@@ -28,7 +28,7 @@ MuCountFn = function(A) {  # Function to connect reads out of both transposon di
 
 
 	# By default, TIR borders on both sides of a Mu element are connected assuming they will map 9 bp apart -- this is true for non-reference elements given the 9 bp target site duplication; the following code connects both sides of an element for insertions that are present in the reference genome
-	MU = read.table('Genome/blastW22.out', sep = '\t', comment ='#')
+	MU = read.table('Genome/blastW22.out', sep = '\t', comment ='#') ##this "blastW22.out file is the blast file for all Mu TIR's that are in the W22 reference genome, and is shared in the "Quantifying-Mu-Insertion-Allele-Frequencies-Across-Tissues" repository. 
 	MU = MU[MU[,7] == 1,]
 	MU$ID = paste(MU[,2], MU[,9] + sign(MU[,9] - MU[,10]), sign(MU[,9] - MU[,10]), sep = ',')
 	MU = MU[order(MU[,2], MU[,9]),-1]
