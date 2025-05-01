@@ -1,0 +1,17 @@
+library(plyr)
+f = dir()
+if ('CleanData.rda' %in% f) { load('CleanData.rda') } else { CleanData = list() }
+f = f[grepl('.txt', f)]
+for (f2 in f) {
+  A = read.table(f2)
+  colnames(A) = c("Chromosome","Position","PositionRev","Reverse","Validation","UMI","MAPQ","Length", "LigationBase")
+colnames(A) = c("Chromosome","Position","Reverse","UMI", "Barcode")
+  A$Position[A$Reverse < 0] = A$PositionRev[A$Reverse < 0] - A$Reverse[A$Reverse < 0] - 1  # Shift position to edge of TIR rather than left-most base
+  A = A[(A$MAPQ >= 10) & (A$Validation %in% c('TATCTC','TGTCTC')), -c(3,5,7:8,10)]# Require mapping quality greater than 10
+  A = ddply(A, colnames(A), nrow)
+  colnames(A)[6] = 'Reads'
+  A$Direction = sign(A[,3])  
+  A = A[order(A[,1],A[,2],-A$Direction),c(1,2,7,6,4)] #only keeping the columns Chromosome, Position, Direction, Reads, and UMI
+  CleanData[[sub('.merge.+', '', sub('Brad_', '', f2))]]=A
+  save(CleanData, file = 'CleanData.rda')
+}
