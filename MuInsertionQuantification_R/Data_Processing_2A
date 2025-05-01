@@ -146,7 +146,7 @@ adjCounts = function(X, thresh = 2, pseudo = 20) {
 
 ######################
 
-load('CleanData 9-23-24.rda')
+load('CleanData.rda')
 ReadsPerUMI = unlist(lapply(CleanData, function(x) { mean(x[,4]) }))
 summary(ReadsPerUMI)
 
@@ -154,7 +154,7 @@ CleanData2 = lapply(CleanData, function(xx) { xx[xx$Reads >= mean(xx$Reads)/5,] 
 
 MoleculeCounts = MergeFn(CleanData2)  # Merge CleanData list into a matrix of Mu TIR counts
 save(MoleculeCounts, file = 'MoleculeCounts.rda')
-rm(CleanData2, CleanData)
+rm(CleanData2, CleanData) #memory intensive files, remove to keep memory load low
 
 MuCounts2 = MuCountFn(MoleculeCounts)  # Connect both TIRs and convert to matrix of Mu Insertion Counts
 MuCounts3 = MuStagger(MuCounts2)  # Connect TIRs with shift from 9 bp TSD... this primarily affects inherited counts for small number of paternal insertions
