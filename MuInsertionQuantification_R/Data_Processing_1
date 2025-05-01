@@ -1,7 +1,7 @@
 ##this code is for converting the mapped MuSeq2 reads to a matrix that can be analyzed in R. 
 library(plyr) #this package is used to concatenate insertion locations based on UMI's
 f = dir() #set working directory to directory where mapped MuSeq2 txt files are located.
-if ('CleanData.rda' %in% f) { load('CleanData.rda') } else { CleanData = list() } #making "CleanData" can be memory intensive. Sometimes, this loop needs to be run in different sessions to reduce memory pressure.
+if ('CleanData.rda' %in% f) { load('CleanData.rda') } else { CleanData = list() } #making "CleanData" can be memory intensive. Sometimes, this loop needs to be run in different sessions to reduce memory pressure. This "if" statement prevent overwriting CleanData if it has already been initialized. 
 f = f[grepl('.txt', f)] #use grepl to grab any files in the directory that end in ".txt" which are all the mapped MuSeq2 txt files. 
 for (f2 in f) { #begin loop processing through all txt files in the directory
   A = read.table(f2)
