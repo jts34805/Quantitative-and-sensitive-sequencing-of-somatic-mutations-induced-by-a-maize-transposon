@@ -1,4 +1,4 @@
-# Mu_AFS
+# Code for "Quantitative and sensitive sequencing of somatic mutations induced by a maize transposon"
 This repository is for code related to the analysis, and mapping/quantitation of Museq2 data associated with the paper "Quantitative and sensitive sequencing of somatic mutations induced by a maize transposon"
 
 
