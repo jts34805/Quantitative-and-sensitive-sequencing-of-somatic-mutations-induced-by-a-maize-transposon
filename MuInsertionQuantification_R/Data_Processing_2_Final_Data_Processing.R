@@ -28,7 +28,7 @@ MuCountFn = function(A) {  # Function to connect reads out of both transposon di
 
 
 	# By default, TIR borders on both sides of a Mu element are connected assuming they will map 9 bp apart -- this is true for non-reference elements given the 9 bp target site duplication; the following code connects both sides of an element for insertions that are present in the reference genome
-	MU = read.table('blastW22.out', sep = '\t', comment ='#') ##this "blastW22.out file is the blast file for all Mu TIR's that are in the W22 reference genome and is in the "MuInsertionQuantification_R" directory
+	MU = read.table('blastW22.out', sep = '\t', comment ='#')
 	MU = MU[MU[,7] == 1,]
 	MU$ID = paste(MU[,2], MU[,9] + sign(MU[,9] - MU[,10]), sign(MU[,9] - MU[,10]), sep = ',')
 	MU = MU[order(MU[,2], MU[,9]),-1]
@@ -153,8 +153,6 @@ summary(ReadsPerUMI)
 CleanData2 = lapply(CleanData, function(xx) { xx[xx$Reads >= mean(xx$Reads)/5,] })
 
 MoleculeCounts = MergeFn(CleanData2)  # Merge CleanData list into a matrix of Mu TIR counts
-save(MoleculeCounts, file = 'MoleculeCounts.rda')
-rm(CleanData2, CleanData) #memory intensive files, remove to keep memory load low
 
 MuCounts2 = MuCountFn(MoleculeCounts)  # Connect both TIRs and convert to matrix of Mu Insertion Counts
 MuCounts3 = MuStagger(MuCounts2)  # Connect TIRs with shift from 9 bp TSD... this primarily affects inherited counts for small number of paternal insertions
@@ -165,8 +163,16 @@ rm(MoleculeCounts, MuCounts2, MuCounts3)
 keeps = rowSums(MuCounts[[1]]) > 0
 MuCounts = lapply(MuCounts, function(xx) { xx[keeps,] })
 
-save(MuCounts, file = 'MuCounts 10-18-24.rda')
 
+
+## For GSE279993 data, output the following:
 write.csv(MuCounts[[1]], file = 'MuSeq2 data for maize tissues.csv')
 write.csv(MuCounts[[2]], file = 'MuSeq2 data for maize tissues _ Right Border.csv')
 write.csv(MuCounts[[3]], file = 'MuSeq2 data for maize tissues _ Left Border.csv')
+
+
+
+## For GSE296286 data, output the following:
+write.csv(MuCounts[[1]], file = 'MuSeq2 count data for bulk pollen outcross experiments.csv')
+
+
