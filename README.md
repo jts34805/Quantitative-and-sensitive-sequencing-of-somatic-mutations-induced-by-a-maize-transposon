@@ -1,13 +1,6 @@
-# Code for "Quantitative and sensitive sequencing of somatic mutations induced by a maize transposon"
-This repository is for code related to the analysis, and mapping/quantitation of Museq2 data associated with the paper "Quantitative and sensitive sequencing of somatic mutations induced by a maize transposon"
+This directory includes all code to map and process the raw fastq files into the processed data files available from GEO. This code will produce the 3 "Supplementary files" from GSE279993 and the 2 supplementary files from  GSE296286. Starting from raw fastqs, the scripts should be run in the following order:
 
-
-To navigate this repository, raw fastqs should first be processed into txt files compatible with R using the script "Data_Mapping_Pipeline" in the "DataMappingPipeline-forGSE279993-and-GSE296286" directory. 
-
-The processed .txt files from Data_Mapping_Pipeline script should then be converted into an R list object using the "Data_Processing_1_Read_Filter_and_Molecular_Counting.R" script in the "MuInsertionQuantification_R" directory. 
-
-This R list object, named "CleanData" can then be converted into an R matrix named "MuCounts" using the "Data_Processing_2_Final_Data_Processing.R" script in the "MuInsertionQuantification_R" directory. This process included converting the molecular count data to Mu insertions, and converging the list object into one matrix that reports the numbers of molecules detected per genome location per sample. 
-
-This R matrix can be used to quantify Mu Insertion Allele frequencies using scripts "Code-to-reproduce-figures" in the base directory. 
-
-File "blastW22.out" is used to identify the ancestral (present in the W22 reference genome) Mu sequences, relevant for the "Data_Processing_2_CleanDatatoMuCountsMatrix script". "blastW22.out" was generated using the Mu TIR sequence in Lisch 2002 review of Mutator transposons and blasting this sequence (NCBI blast) against the W22 chromosome scaffold version 2 genome build. 
+1. Data_Mapping_Pipeline
+2. Data_Processing_1_Read_Filtering_and_Molecular_Counting
+3. Data_Processing_2_Final_Data_Processing
+4. Code-to-reproduce-figures.R
