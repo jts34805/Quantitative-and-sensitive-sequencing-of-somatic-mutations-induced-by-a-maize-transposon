@@ -6,7 +6,7 @@ mkdir dedup
 mkdir txtfiles ##making directories that will be used in the following loop. Read 1 and Read 2 of fastq.gz files should be loaded into the rawdata directory. 
 for file in rawdata/*R1* ##set up a loop to iterate over all files in the rawdata directory, which should contain all fastqs from a Museq2 run  
 do
-  	file2="${file:8:-12}" #trim the first 8 and last 12 characters of the file name for the loop. Can be different values depending on the name of the fastq file. 
+  	file2="${file:8:-11}" #trim the first 8 and last 11 characters of the file name for the loop. Can be different values depending on the name of the fastq file. 
         fastp -w 8 -i $file -o processed/"$file2""R1A.fastq.gz" -f 23 -A -G -Q -L ###read 1 begins with the primer sequence that is 23 bp long. this step removes that. output file is put in the processed directory with the "R1A.fastq.gz" text appended to the end. 
 
         fastp -i processed/"$file2""R1A.fastq.gz" -I rawdata/"$file2"".R2.fastq.gz" -o processed/"$file2""R1B.fastq.gz" -O processed/"$file2""R2B.fastq.gz" -U --umi_loc read1 --umi_len 6 --umi_prefix TIR -h html/"$file2"".html" -A -G -Q -L ###the next 6 bp of read 1 is the edge of the TIR not apart of the primer sequence. It should match to "TATCTC" validation sequence. This line moves these 6 bp to the header so that later steps can filter based on matching to the expected sequence. 
