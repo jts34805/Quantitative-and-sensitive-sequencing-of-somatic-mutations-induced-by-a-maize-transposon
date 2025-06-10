@@ -10,9 +10,11 @@ Starting from raw fastqs, the scripts should be run in the following order:
 
 The following additional files are used internal to these scripts:
 1. adapter2.1.fa - used internal to Data_Mapping_Pipeline.sh script to trim reads that sequence the reverse complement of adapter (read 2)
-2. blastW22.out - blast file generated from MU TIRs (from Lisch 2002 Mu transposon review), used in Data_Processing_2_Final_Data_Processing to match transposon spanning molecules that map to Mu elements in the reference genome
-3. historicals.txt used in Family_Genotyping_for_GSE296286 to call historical Mu insertions in the inherited dataset file "Transmitted Mu insertions from bulk pollen outcross experiments.csv"
-4. blacklist.txt used in Family_Genotyping_for_GSE296286 to remove insertions mapping to blacklisted genome regions. 
+2. AdapterBarcodeMatchingGSE279993.csv - csv file that contains the adapter barcode that match with the fastq file names as they are downloaded from SRA (SRR****) for GSE279993. Also includes the sample ID used in processed data files.
+3. AdapterBarcodeMatchingGSE296286.csv - csv file that contains the adapter barcode that match with the fastq file names as they are downloaded from SRA (SRR****) for GSE296286. Also includes the sample ID used in processed data files.
+4. blastW22.out - blast file generated from MU TIRs (from Lisch 2002 Mu transposon review), used in Data_Processing_2_Final_Data_Processing to match transposon spanning molecules that map to Mu elements in the reference genome
+5. historicals.txt used in Family_Genotyping_for_GSE296286 to call historical Mu insertions in the inherited dataset file "Transmitted Mu insertions from bulk pollen outcross experiments.csv"
+6. blacklist.txt used in Family_Genotyping_for_GSE296286 to remove insertions mapping to blacklisted genome regions. 
 
 
 
